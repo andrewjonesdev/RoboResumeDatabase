@@ -28,28 +28,32 @@ public class Work {
 	private String primaryKeyName = "workID";
 	private int primaryKeyID = 0;
 	private Resume resume = new Resume();
+	private int resumeID = resume.getID();
 	//private ArrayList <String> duties = new ArrayList();
 	//private Job job = new Job(); 
 	
 	public Work(){
-		//jobTitle = "Graphic Designer";
+		jobTitle = "Graphic Designer";
 		//jobTitle = job.getJobTitle();
 		employer = "Hallmark";
 		startMonth = "M.F.A.";
 		endMonth = "Arizona State University";
 		startYear = 2010;
 		endYear = 2017;
+		resumeID = resume.getID();
 		try{
 			Class.forName(forName);
             con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
-			String sql  = "INSERT INTO WorkR (employer,startMonth,startYear,endMonth,endYear) VALUES (?,?,?,?,?);";
+			String sql  = "INSERT INTO WorkR (jobTitle,employer,startMonth,startYear,endMonth,endYear,workResume) VALUES (?,?,?,?,?,?,?);";
 			PreparedStatement p = con.prepareStatement(sql);
-			p.setString(1, employer);
-			p.setString(2, startMonth);
-			p.setInt(3, startYear);
-			p.setString(4, endMonth);
-			p.setInt(5, endYear);
+			p.setString(1, jobTitle);
+			p.setString(2, employer);
+			p.setString(3, startMonth);
+			p.setInt(4, startYear);
+			p.setString(5, endMonth);
+			p.setInt(6, endYear);
+			p.setInt(7, resumeID);
 			p.executeUpdate();
 			//con.commit();
 			}catch (SQLException e) {
@@ -61,25 +65,28 @@ public class Work {
 		
 		//job.addDuty("Design Cards");
 	}
-	public Work(/*String jT,*/ String em, String sM, String eM, int sY, int eY, Resume re){
-		//jobTitle = jT;
+	public Work(String jT, String em, String sM, String eM, int sY, int eY, Resume re){
+		jobTitle = jT;
 		employer = em;
 		startMonth = sM;
 		endMonth = eM;
 		startYear = sY;
 		endYear = eY;
 		resume = re;
+		resumeID = re.getID();
 		try{
 			Class.forName(forName);
             con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
-			String sql  = "INSERT INTO WorkR (employer,startMonth,startYear,endMonth,endYear) VALUES (?,?,?,?,?);";
+			String sql  = "INSERT INTO WorkR (jobTitle,employer,startMonth,startYear,endMonth,endYear,workResume) VALUES (?,?,?,?,?,?,?);";
 			PreparedStatement p = con.prepareStatement(sql);
-			p.setString(1, employer);
-			p.setString(2, startMonth);
-			p.setInt(3, startYear);
-			p.setString(4, endMonth);
-			p.setInt(5, endYear);
+			p.setString(1, jobTitle);
+			p.setString(2, employer);
+			p.setString(3, startMonth);
+			p.setInt(4, startYear);
+			p.setString(5, endMonth);
+			p.setInt(6, endYear);
+			p.setInt(7, resumeID);
 			p.executeUpdate();
 			//con.commit();
 			}catch (SQLException e) {
@@ -96,9 +103,9 @@ public class Work {
 	public int getID(){
 		return primaryKeyID;
 	}
-	/*public String getJobTitle(){
-		return job.getJobTitle();
-	}*/
+	public String getJobTitle(){
+		return UtilityMySql.getStringMySql(forName, driverConnection, jobTitle, "jobTitle", table, primaryKeyName, primaryKeyID);
+	}
 	public String getEmployer(){
 		return UtilityMySql.getStringMySql(forName, driverConnection, employer, "employer", table, primaryKeyName, primaryKeyID);
 	}
@@ -117,9 +124,9 @@ public class Work {
 	public Resume getResume(){
 		return resume;
 	}
-	/*public void setJobTitle(String jT){
-		job.setJobTitle(jT);
-	}*/
+	public void setJobTitle(String jT){
+		UtilityMySql.setStringMySql(forName, driverConnection, jobTitle, jT, "jobTitle", table, primaryKeyName, primaryKeyID);
+	}
 	public void setEmployer(String em){
 		UtilityMySql.setStringMySql(forName, driverConnection, employer, em, "employer", table, primaryKeyName, primaryKeyID);
 	}
@@ -137,6 +144,7 @@ public class Work {
 	}
 	public void setResume(Resume re){
 		resume = re;
+		UtilityMySql.setIntMySql(forName, driverConnection, resumeID, re.getID(), "workResume", table, primaryKeyName, primaryKeyID);
 	}
 /*	public void addDuty(String d){
 		job.addDuty(d);

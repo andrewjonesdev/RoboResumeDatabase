@@ -17,24 +17,26 @@ public class Skill {
 	private Statement stmt = null;
 	private ResultSet rs = null;
 	private String forName = "com.mysql.jdbc.Driver";
-	private String driverConnection = "jdbc:mysql://localhost/Customer?user=root&password=password";
+	private String driverConnection = "jdbc:mysql://localhost/roboResume?user=root&password=password";
 	//private String driverConnection = "jdbc:mysql://localhost/roboResume?user=root&password=root";
 	private String table = "SkillR";
 	private String primaryKeyName = "skillID";
 	private int primaryKeyID = 0;
 	private Resume resume = new Resume();
-
+	private int resumeID = resume.getID();
 	public Skill(){
 		skillName = "Adobe Illustrator";
 		rating = "Godlike";
+		resumeID = resume.getID();
 		try{
 			Class.forName(forName);
             con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
-			String sql  = "INSERT INTO SkillR (skillName,skillRating) VALUES (?,?);";
+			String sql  = "INSERT INTO SkillR (skillName,skillRating,skillResume) VALUES (?,?,?);";
 			PreparedStatement p = con.prepareStatement(sql);
 			p.setString(1, skillName);
 			p.setString(2, rating);
+			p.setInt(3, resumeID);
 			p.executeUpdate();
 			//con.commit();
 			}catch (SQLException e) {
@@ -48,14 +50,16 @@ public class Skill {
 		skillName = sN;
 		rating = ra;
 		resume = re;
+		resumeID = re.getID();
 		try{
 			Class.forName(forName);
             con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
-			String sql  = "INSERT INTO SkillR (skillName,skillRating) VALUES (?,?);";
+			String sql  = "INSERT INTO SkillR (skillName,skillRating,skillResume) VALUES (?,?,?);";
 			PreparedStatement p = con.prepareStatement(sql);
 			p.setString(1, sN);
 			p.setString(2, ra);
+			p.setInt(3, resumeID);
 			p.executeUpdate();
 			//con.commit();
 			}catch (SQLException e) {
@@ -88,6 +92,7 @@ public class Skill {
 	}
 	public void setResume(Resume re){
 		resume = re;
+		UtilityMySql.setIntMySql(forName, driverConnection, resumeID, re.getID(), "skillResume", table, primaryKeyName, primaryKeyID);
 	}
 	
 	public String toString(){

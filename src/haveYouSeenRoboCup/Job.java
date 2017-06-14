@@ -26,15 +26,19 @@ public class Job {
 	private String primaryKeyName = "CustomerID";
 	private int primaryKeyID = 0;
 	private Work work = new Work();
+	private int workID = work.getID();
 	public Job(){
 		//duties.add("Design Cards");
+		String jobTitle = "Graphic Designer";
+		workID = work.getID();
 		try{
 			Class.forName(forName);
             con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
-			String sql  = "INSERT INTO JobR (jobTitle) VALUES (?);";
+			String sql  = "INSERT INTO JobR (jobTitle,jobWork) VALUES (?,?);";
 			PreparedStatement p = con.prepareStatement(sql);
 			p.setString(1, jobTitle);
+			p.setInt(2, workID);
 			p.executeUpdate();
 			//con.commit();
 			}catch (SQLException e) {
@@ -47,15 +51,16 @@ public class Job {
 	public Job(String jT, Work wo){
 		jobTitle = jT;
 		work = wo;
+		workID = wo.getID();
 		try{
 			Class.forName(forName);
             con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
-			String sql  = "INSERT INTO JobR (jobTitle) VALUES (?);";
+			String sql  = "INSERT INTO JobR (jobTitle,jobWork) VALUES (?,?);";
 			PreparedStatement p = con.prepareStatement(sql);
-			p.setString(1, jT);
+			p.setString(1, jobTitle);
+			p.setInt(2, workID);
 			p.executeUpdate();
-			jobTitle = jT;
 			//con.commit();
 			}catch (SQLException e) {
 				e.printStackTrace();
@@ -81,6 +86,7 @@ public class Job {
 	}
 	public void setWork(Work wo){
 		wo = work;
+		UtilityMySql.setIntMySql(forName, driverConnection, workID, wo.getID(), "jobWork", table, primaryKeyName, primaryKeyID);
 	}
 	/*
 	public void addDuty(String d){

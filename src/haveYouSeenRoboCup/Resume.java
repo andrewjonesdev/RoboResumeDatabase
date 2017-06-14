@@ -18,7 +18,7 @@ public class Resume {
 	private Statement stmt = null;
 	private ResultSet rs = null;
 	private String forName = "com.mysql.jdbc.Driver";
-	private String driverConnection = "jdbc:mysql://localhost/Customer?user=root&password=password";
+	private String driverConnection = "jdbc:mysql://localhost/roboResume?user=root&password=password";
 	//private String driverConnection = "jdbc:mysql://localhost/roboResume?user=root&password=root";
 	private String table = "ResumeR";
 	private String primaryKeyName = "resumeID";

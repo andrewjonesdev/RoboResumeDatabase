@@ -27,21 +27,24 @@ public class Education {
 	private String primaryKeyName = "eduID";
 	private int primaryKeyID = 0;
 	private Resume resume = new Resume();
+	private int resumeID = resume.getID();
 	public Education(){
 		courseOfStudy = "Graphic Design";
 		degree = "M.F.A.";
 		school = "Arizona State University";
 		gradYear = 2010;
+		resumeID = resume.getID();
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
-			String sql  = "INSERT INTO EducationR (eduCourse,eduDegree,eduSchool,eduGradYear) VALUES (?,?,?,?);";
+			String sql  = "INSERT INTO EducationR (eduCourse,eduDegree,eduSchool,eduGradYear,eduResume) VALUES (?,?,?,?,?);";
 			PreparedStatement p = con.prepareStatement(sql);
 			p.setString(1, courseOfStudy);
 			p.setString(2, degree);
 			p.setString(3, school);
 			p.setInt(4, gradYear);
+			p.setInt(5, resumeID);
 			p.executeUpdate();
 			//con.commit();
 			}catch (SQLException e) {
@@ -58,26 +61,26 @@ public class Education {
 		school = sch;
 		gradYear = gY;
 		resume = re;
+		resumeID = re.getID();
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
-			String sql  = "INSERT INTO EducationR (eduCourse,eduDegree,eduSchool,eduGradYear) VALUES (?,?,?,?);";
+			String sql  = "INSERT INTO EducationR (eduCourse,eduDegree,eduSchool,eduGradYear,eduResume) VALUES (?,?,?,?,?);";
 			PreparedStatement p = con.prepareStatement(sql);
 			p.setString(1, courseOfStudy);
 			p.setString(2, degree);
 			p.setString(3, school);
 			p.setInt(4, gradYear);
+			p.setInt(5, resumeID);
 			p.executeUpdate();
-			System.out.println(1);
 			//con.commit();
-			}catch (SQLException e) { 
-			System.out.println(2);
+			}catch (SQLException e) {
 				e.printStackTrace();
 			}catch (ClassNotFoundException e) {
-				System.out.println(3);
 				e.printStackTrace();
 		}
+		primaryKeyID = getLastID();
 		primaryKeyID = getLastID();
 	}
 	private int getLastID(){
@@ -116,6 +119,7 @@ public class Education {
 	}
 	public void setResume(Resume re){
 		resume = re;
+		UtilityMySql.setIntMySql(forName, driverConnection, resumeID, re.getID(), "eduResume", table, primaryKeyName, primaryKeyID);
 	}
 	public String toString(){
  
