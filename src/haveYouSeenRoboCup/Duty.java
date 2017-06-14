@@ -8,19 +8,27 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import utilityForHire.UtilityMySql;
+
 public class Duty {
-	private String dutyTitle = "Make Designs";
+	private String dutyTitle = "";
 	private ArrayList <String> duties = new ArrayList();
 	private Connection con = null;
 	private Statement stmt = null;
 	private ResultSet rs = null;
-	private int id = 0;
+	private String forName = "com.mysql.jdbc.Driver";
+	private String driverConnection = "jdbc:mysql://localhost/roboResume?user=root&password=password";
+//	private String driverConnection = "jdbc:mysql://localhost/roboResume?user=root&password=root";
+	private String table = "DutyR";
+	private String primaryKeyName = "dutyID";
+	private int primaryKeyID = 0;
+	private Job job = new Job();
 	public Duty(){
 		//duties.add("Design Cards");
+		dutyTitle = "Make Designs";
 		try{
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
+			Class.forName(forName);
+            con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
 			String sql  = "INSERT INTO DutyR (dutyTitle) VALUES (?);";
 			PreparedStatement p = con.prepareStatement(sql);
@@ -32,93 +40,44 @@ public class Duty {
 			}catch (ClassNotFoundException e) {
 				e.printStackTrace();
 		}
-		id = getLastID();
+		primaryKeyID = getLastID();
 	}
-	public Duty(String dT){
+	public Duty(String dT, Job jo){
 		dutyTitle = dT;
+		job = jo;
 		try{
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
+			Class.forName(forName);
+            con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
 			String sql  = "INSERT INTO DutyR (dutyTitle) VALUES (?);";
 			PreparedStatement p = con.prepareStatement(sql);
-			p.setString(1, dT);
+			p.setString(1, dutyTitle);
 			p.executeUpdate();
-			dutyTitle = dT;
 			//con.commit();
 			}catch (SQLException e) {
 				e.printStackTrace();
 			}catch (ClassNotFoundException e) {
 				e.printStackTrace();
 		}
-		id = getLastID();
+		primaryKeyID = getLastID();
 	}
 	private int getLastID(){
-		int output = -1;
-		try{
-			
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
-			stmt = con.createStatement();
-			String sql  = "select dutyID from DutyR;";
-			PreparedStatement p = con.prepareStatement(sql);
-			rs=p.executeQuery();
-			rs.last();
-			output = rs.getInt(1);
-			id = output;
-			return output;
-			//p.setInt(1, id);
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-		}
-		return output;
+		return UtilityMySql.getLastID(forName, driverConnection, table, primaryKeyName);
 	}
 	public int getID(){
-		return id;
+		return primaryKeyID;
 	}
 	public String getdutyTitle(){
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
-			stmt = con.createStatement();
-			String sql  = "select dutyTitle from DutyR where dutyID = ?";
-			PreparedStatement p = con.prepareStatement(sql);
-			p.setInt(1, id);
-			rs = p.executeQuery();
-			rs.next();
-			dutyTitle = rs.getString("dutyTitle");
-			return dutyTitle;
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-		}
-		return dutyTitle;
+		return UtilityMySql.getStringMySql(forName, driverConnection, dutyTitle, "", table, primaryKeyName, primaryKeyID);
+	}
+	public Job getJob(){
+		return job;
 	}
 	public void setDutyTitle(String dT){
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
-			stmt = con.createStatement();
-			String sql  = "UPDATE DutyR SET dutyTitle = ? WHERE dutyID = ?;";
-			PreparedStatement p = con.prepareStatement(sql);
-			dutyTitle = dT;
-			p.setString(1, dT);
-			p.setInt(2, id);
-			p.executeUpdate();
-			rs.next();
-			
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-		}
+		UtilityMySql.setStringMySql(forName, driverConnection, dutyTitle, dT, "dutyTitle", table, primaryKeyName, primaryKeyID);
+	}
+	public void setJob(Job jo){
+		job = jo;
 	}
 	/*public void addDuty(String d){
 		duties.add(d);

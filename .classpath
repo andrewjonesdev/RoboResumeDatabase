@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="mysql-connector-java-5.1.42-bin.jar"/>
 	<classpathentry kind="lib" path="UtilityStringNScan.jar"/>
+	<classpathentry kind="lib" path="UtilityMySql.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

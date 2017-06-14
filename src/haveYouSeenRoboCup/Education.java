@@ -1,4 +1,4 @@
-package haveYouSeenRoboCup;
+ package haveYouSeenRoboCup;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import utilityForHire.UtilityMySql;
 
 
 
@@ -18,8 +20,12 @@ public class Education {
 	private Connection con = null;
 	private Statement stmt = null;
 	private ResultSet rs = null;
-	private int id = 0;
-	
+	private String forName = "com.mysql.jdbc.Driver";
+	private String driverConnection = "jdbc:mysql://localhost/roboResume?user=root&password=password";
+//	private String driverConnection = "jdbc:mysql://localhost/roboResume?user=root&password=root";
+	private String table = "EducationR";
+	private String primaryKeyName = "eduID";
+	private int primaryKeyID = 0;
 	public Education(){
 		courseOfStudy = "Graphic Design";
 		degree = "M.F.A.";
@@ -27,8 +33,7 @@ public class Education {
 		gradYear = 2010;
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
+            con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
 			String sql  = "INSERT INTO EducationR (eduCourse,eduDegree,eduSchool,eduGradYear) VALUES (?,?,?,?);";
 			PreparedStatement p = con.prepareStatement(sql);
@@ -43,7 +48,7 @@ public class Education {
 			}catch (ClassNotFoundException e) {
 				e.printStackTrace();
 		}
-		id = getLastID();
+		primaryKeyID = getLastID();
 		
 	}
 	public Education(String cOS, String deg, String sch, int gY){
@@ -53,15 +58,14 @@ public class Education {
 		gradYear = gY;
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
+            con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
 			String sql  = "INSERT INTO EducationR (eduCourse,eduDegree,eduSchool,eduGradYear) VALUES (?,?,?,?);";
 			PreparedStatement p = con.prepareStatement(sql);
-			p.setString(1, cOS);
-			p.setString(2, deg);
-			p.setString(3, sch);
-			p.setInt(4, gY);
+			p.setString(1, courseOfStudy);
+			p.setString(2, degree);
+			p.setString(3, school);
+			p.setInt(4, gradYear);
 			p.executeUpdate();
 			System.out.println(1);
 			//con.commit();
@@ -72,194 +76,38 @@ public class Education {
 				System.out.println(3);
 				e.printStackTrace();
 		}
-		id = getLastID();
+		primaryKeyID = getLastID();
 	}
 	private int getLastID(){
-		int output = -1;
-		try{
-			
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
-			stmt = con.createStatement();
-			String sql  = "select eduID from EducationR;";
-			PreparedStatement p = con.prepareStatement(sql);
-			rs=p.executeQuery();
-			rs.last();
-			output = rs.getInt(1);
-			id = output;
-			return output;
-			//p.setInt(1, id);
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-		}
-		return output;
+
+		return UtilityMySql.getLastID(forName, driverConnection, table, primaryKeyName);
 	}
 	public int getID(){
-		return id;
+		return primaryKeyID;
 	}
 	public String getCourseOfStudy(){
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
-			stmt = con.createStatement();
-			String sql  = "select eduCourse from EducationR where eduID = ?";
-			PreparedStatement p = con.prepareStatement(sql);
-			p.setInt(1, id);
-			rs = p.executeQuery();
-			rs.next();
-			courseOfStudy = rs.getString("eduCourse");
-			return courseOfStudy;
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-		}
-		return courseOfStudy;
+		return UtilityMySql.getStringMySql(forName, driverConnection, courseOfStudy, "eduCourse", table, primaryKeyName, primaryKeyID);
 	}
 	public String getDegree(){
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
-			stmt = con.createStatement();
-			String sql  = "select eduDegree from EducationR where eduID = ?";
-			PreparedStatement p = con.prepareStatement(sql);
-			p.setInt(1, id);
-			rs = p.executeQuery();
-			rs.next();
-			degree = rs.getString("eduDegree");
-			return degree;
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-		}
-		return degree;
+		return UtilityMySql.getStringMySql(forName, driverConnection, degree, "eduDegree", table, primaryKeyName, primaryKeyID);
 	}
 	public String getSchool(){
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
-			stmt = con.createStatement();
-			String sql  = "select eduSchool from EducationR where eduID = ?";
-			PreparedStatement p = con.prepareStatement(sql);
-			p.setInt(1, id);
-			rs = p.executeQuery();
-			rs.next();
-			school = rs.getString("eduSchool");
-			return school;
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-		}
-		return school;
+		return UtilityMySql.getStringMySql(forName, driverConnection, school, "eduSchool", table, primaryKeyName, primaryKeyID);
 	}
 	public int getGradYear(){
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
-			stmt = con.createStatement();
-			String sql  = "select eduGradYear from EducationR where eduID = ?";
-			PreparedStatement p = con.prepareStatement(sql);
-			p.setInt(1, id);
-			rs = p.executeQuery();
-			rs.next();
-			gradYear = rs.getInt("eduGradYear");
-			return gradYear;
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-		}
-		return gradYear;
+		return UtilityMySql.getIntMySql(forName, driverConnection, gradYear, "eduGradYear", table, primaryKeyName, primaryKeyID);
 	}
 	public void setCourseOfStudy(String cOS){
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
-			stmt = con.createStatement();
-			String sql  = "UPDATE EducationR SET eduCourse = ? WHERE eduID = ?;";
-			PreparedStatement p = con.prepareStatement(sql);
-			courseOfStudy = cOS;
-			p.setString(1, cOS);
-			p.setInt(2, id);
-			p.executeUpdate();
-			rs.next();
-			
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-		}
-		
+		UtilityMySql.setStringMySql(forName, driverConnection, courseOfStudy, cOS, "eduCourse", table, primaryKeyName, primaryKeyID);
 	}
 	public void setDegree(String deg){
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
-			stmt = con.createStatement();
-			String sql  = "UPDATE EducationR SET eduDegree = ? WHERE eduID = ?;";
-			PreparedStatement p = con.prepareStatement(sql);
-			degree = deg;
-			p.setString(1, deg);
-			p.setInt(2, id);
-			p.executeUpdate();
-			rs.next();
-			
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-		}
+		UtilityMySql.setStringMySql(forName, driverConnection, degree, deg, "eduDegree", table, primaryKeyName, primaryKeyID);
 	}
 	public void setSchool(String sch){
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
-			stmt = con.createStatement();
-			String sql  = "UPDATE EducationR SET eduSchool = ? WHERE eduID = ?;";
-			PreparedStatement p = con.prepareStatement(sql);
-			school = sch;
-			p.setString(1, sch);
-			p.setInt(2, id);
-			p.executeUpdate();
-			rs.next();
-			
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-		}
+		UtilityMySql.setStringMySql(forName, driverConnection, school, sch, "eduSchool", table, primaryKeyName, primaryKeyID);
 	}
 	public void setGradYear(int gY){
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/roboResume?"
-                                + "user=root&password=password");
-			stmt = con.createStatement();
-			String sql  = "UPDATE EducationR SET eduGradYear = ? WHERE eduID = ?;";
-			PreparedStatement p = con.prepareStatement(sql);
-			gradYear = gY;
-			p.setInt(1, gY);
-			p.setInt(2, id);
-			p.executeUpdate();
-			rs.next();
-			
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}catch (ClassNotFoundException e) {
-				e.printStackTrace();
-		}
+		UtilityMySql.setIntMySql(forName, driverConnection, gradYear, gY, "eduGradYear", table, primaryKeyName, primaryKeyID);
 	}
 	public String toString(){
  

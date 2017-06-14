@@ -1,5 +1,14 @@
 package haveYouSeenRoboCup;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import utilityForHire.UtilityMySql;
+
 //import java.util.ArrayList;
 
 public class Work {
@@ -9,65 +18,119 @@ public class Work {
 	private String endMonth = "";
 	private int startYear = 0;
 	private int endYear = 0;
+	private Connection con = null;
+	private Statement stmt = null;
+	private ResultSet rs = null;
+	private String forName = "com.mysql.jdbc.Driver";
+	private String driverConnection = "jdbc:mysql://localhost/roboResume?user=root&password=password";
+//	private String driverConnection = "jdbc:mysql://localhost/roboResume?user=root&password=root";
+	private String table = "WorkR";
+	private String primaryKeyName = "workID";
+	private int primaryKeyID = 0;
 	//private ArrayList <String> duties = new ArrayList();
-	private Job job = new Job(); 
+	//private Job job = new Job(); 
 	
 	public Work(){
 		//jobTitle = "Graphic Designer";
-		jobTitle = job.getJobTitle();
+		//jobTitle = job.getJobTitle();
 		employer = "Hallmark";
 		startMonth = "M.F.A.";
 		endMonth = "Arizona State University";
 		startYear = 2010;
 		endYear = 2017;
+		try{
+			Class.forName(forName);
+            con = DriverManager.getConnection(driverConnection);
+			stmt = con.createStatement();
+			String sql  = "INSERT INTO WorkR (employer,startMonth,startYear,endMonth,endYear) VALUES (?,?,?,?,?);";
+			PreparedStatement p = con.prepareStatement(sql);
+			p.setString(1, employer);
+			p.setString(2, startMonth);
+			p.setInt(3, startYear);
+			p.setString(4, endMonth);
+			p.setInt(5, endYear);
+			p.executeUpdate();
+			//con.commit();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}catch (ClassNotFoundException e) {
+				e.printStackTrace();
+		}
+		primaryKeyID = getLastID();
+		
 		//job.addDuty("Design Cards");
 	}
-	public Work(String jT, String em, String sM, String eM, int sY, int eY){
-		jobTitle = jT;
+	public Work(/*String jT,*/ String em, String sM, String eM, int sY, int eY){
+		//jobTitle = jT;
 		employer = em;
 		startMonth = sM;
 		endMonth = eM;
 		startYear = sY;
 		endYear = eY;
+		try{
+			Class.forName(forName);
+            con = DriverManager.getConnection(driverConnection);
+			stmt = con.createStatement();
+			String sql  = "INSERT INTO WorkR (employer,startMonth,startYear,endMonth,endYear) VALUES (?,?,?,?,?);";
+			PreparedStatement p = con.prepareStatement(sql);
+			p.setString(1, employer);
+			p.setString(2, startMonth);
+			p.setInt(3, startYear);
+			p.setString(4, endMonth);
+			p.setInt(5, endYear);
+			p.executeUpdate();
+			//con.commit();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}catch (ClassNotFoundException e) {
+				e.printStackTrace();
+		}
+		primaryKeyID = getLastID();
+		
 	}
-	
-	public String getJobTitle(){
+	private int getLastID(){
+		return UtilityMySql.getLastID(forName, driverConnection, table, primaryKeyName);
+	}
+	public int getID(){
+		return primaryKeyID;
+	}
+	/*public String getJobTitle(){
 		return job.getJobTitle();
-	}
+	}*/
 	public String getEmployer(){
-		return employer;
+		return UtilityMySql.getStringMySql(forName, driverConnection, employer, "employer", table, primaryKeyName, primaryKeyID);
 	}
 	public String getStartMonth(){
-		return startMonth;
+		return UtilityMySql.getStringMySql(forName, driverConnection, startMonth, "startMonth", table, primaryKeyName, primaryKeyID);
 	}
 	public String getEndMonth(){
-		return endMonth;
+		return UtilityMySql.getStringMySql(forName, driverConnection, endMonth, "endMonth", table, primaryKeyName, primaryKeyID);
 	}
 	public int getStartYear(){
-		return startYear;
+		return UtilityMySql.getIntMySql(forName, driverConnection, startYear, "startYear", table, primaryKeyName, primaryKeyID);
 	}
 	public int getEndYear(){
-		return endYear;
+		return UtilityMySql.getIntMySql(forName, driverConnection, endYear, "endYear", table, primaryKeyName, primaryKeyID);
 	}
-	public void setJobTitle(String jT){
+	/*public void setJobTitle(String jT){
 		job.setJobTitle(jT);
-	}
+	}*/
 	public void setEmployer(String em){
-		employer = em;
+		UtilityMySql.setStringMySql(forName, driverConnection, employer, em, "employer", table, primaryKeyName, primaryKeyID);
 	}
 	public void setStartMonth(String sM){
-		startMonth = sM;
+		UtilityMySql.setStringMySql(forName, driverConnection, startMonth, sM, "startMonth", table, primaryKeyName, primaryKeyID);
 	}
 	public void setEndMonth(String eM){
-		endMonth = eM;
+		UtilityMySql.setStringMySql(forName, driverConnection, endMonth, eM, "endMonth", table, primaryKeyName, primaryKeyID);
 	}
 	public void setStartYear(int sY){
-		startYear = sY;
+		UtilityMySql.setIntMySql(forName, driverConnection, startYear, sY, "startYear", table, primaryKeyName, primaryKeyID);
 	}
 	public void setEndYear(int eY){
-		endYear = eY;
+		UtilityMySql.setIntMySql(forName, driverConnection, endYear, eY, "endYear", table, primaryKeyName, primaryKeyID);
 	}
-	public void addDuty(String d){
+/*	public void addDuty(String d){
 		job.addDuty(d);
 	}
 	public String getAt(int i){
@@ -93,7 +156,7 @@ public class Work {
 		//System.out.print(output);
 		return output;
 	}
-
+*/
 	public String consoleTextFormatter(String text, int nextLine)
 	{
 		String[] listOfStrings = text.split(" ");
