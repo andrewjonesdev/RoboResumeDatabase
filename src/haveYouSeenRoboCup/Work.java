@@ -27,6 +27,7 @@ public class Work {
 	private String table = "WorkR";
 	private String primaryKeyName = "workID";
 	private int primaryKeyID = 0;
+	private Resume resume = new Resume();
 	//private ArrayList <String> duties = new ArrayList();
 	//private Job job = new Job(); 
 	
@@ -60,13 +61,14 @@ public class Work {
 		
 		//job.addDuty("Design Cards");
 	}
-	public Work(/*String jT,*/ String em, String sM, String eM, int sY, int eY){
+	public Work(/*String jT,*/ String em, String sM, String eM, int sY, int eY, Resume re){
 		//jobTitle = jT;
 		employer = em;
 		startMonth = sM;
 		endMonth = eM;
 		startYear = sY;
 		endYear = eY;
+		resume = re;
 		try{
 			Class.forName(forName);
             con = DriverManager.getConnection(driverConnection);
@@ -112,6 +114,9 @@ public class Work {
 	public int getEndYear(){
 		return UtilityMySql.getIntMySql(forName, driverConnection, endYear, "endYear", table, primaryKeyName, primaryKeyID);
 	}
+	public Resume getResume(){
+		return resume;
+	}
 	/*public void setJobTitle(String jT){
 		job.setJobTitle(jT);
 	}*/
@@ -129,6 +134,9 @@ public class Work {
 	}
 	public void setEndYear(int eY){
 		UtilityMySql.setIntMySql(forName, driverConnection, endYear, eY, "endYear", table, primaryKeyName, primaryKeyID);
+	}
+	public void setResume(Resume re){
+		resume = re;
 	}
 /*	public void addDuty(String d){
 		job.addDuty(d);

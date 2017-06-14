@@ -26,6 +26,7 @@ public class Education {
 	private String table = "EducationR";
 	private String primaryKeyName = "eduID";
 	private int primaryKeyID = 0;
+	private Resume resume = new Resume();
 	public Education(){
 		courseOfStudy = "Graphic Design";
 		degree = "M.F.A.";
@@ -51,11 +52,12 @@ public class Education {
 		primaryKeyID = getLastID();
 		
 	}
-	public Education(String cOS, String deg, String sch, int gY){
+	public Education(String cOS, String deg, String sch, int gY, Resume re){
 		courseOfStudy = cOS;
 		degree = deg;
 		school = sch;
 		gradYear = gY;
+		resume = re;
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(driverConnection);
@@ -97,6 +99,9 @@ public class Education {
 	public int getGradYear(){
 		return UtilityMySql.getIntMySql(forName, driverConnection, gradYear, "eduGradYear", table, primaryKeyName, primaryKeyID);
 	}
+	public Resume getResume(){
+		return resume;
+	}
 	public void setCourseOfStudy(String cOS){
 		UtilityMySql.setStringMySql(forName, driverConnection, courseOfStudy, cOS, "eduCourse", table, primaryKeyName, primaryKeyID);
 	}
@@ -108,6 +113,9 @@ public class Education {
 	}
 	public void setGradYear(int gY){
 		UtilityMySql.setIntMySql(forName, driverConnection, gradYear, gY, "eduGradYear", table, primaryKeyName, primaryKeyID);
+	}
+	public void setResume(Resume re){
+		resume = re;
 	}
 	public String toString(){
  

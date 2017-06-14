@@ -10,31 +10,33 @@ import java.util.ArrayList;
 
 import utilityForHire.UtilityMySql;
 
-public class Skill {
-	private String skillName = "";
-	private String rating = "";
+public class Resume {
+	private String firstName = "";
+	private String lastName = "";
+	private String email = "";
 	private Connection con = null;
 	private Statement stmt = null;
 	private ResultSet rs = null;
 	private String forName = "com.mysql.jdbc.Driver";
 	private String driverConnection = "jdbc:mysql://localhost/Customer?user=root&password=password";
 	//private String driverConnection = "jdbc:mysql://localhost/roboResume?user=root&password=root";
-	private String table = "SkillR";
-	private String primaryKeyName = "skillID";
+	private String table = "ResumeR";
+	private String primaryKeyName = "resumeID";
 	private int primaryKeyID = 0;
-	private Resume resume = new Resume();
 
-	public Skill(){
-		skillName = "Adobe Illustrator";
-		rating = "Godlike";
+	public Resume(){
+		firstName = "Andrew";
+		lastName = "Jones";
+		email = "andrewjonesexample@email.com";
 		try{
 			Class.forName(forName);
             con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
-			String sql  = "INSERT INTO SkillR (skillName,skillRating) VALUES (?,?);";
+			String sql  = "INSERT INTO ResumeR (resumeFirst,resumeLast,resumeEmail) VALUES (?,?,?);";
 			PreparedStatement p = con.prepareStatement(sql);
-			p.setString(1, skillName);
-			p.setString(2, rating);
+			p.setString(1, firstName);
+			p.setString(2, lastName);
+			p.setString(3, email);
 			p.executeUpdate();
 			//con.commit();
 			}catch (SQLException e) {
@@ -44,18 +46,19 @@ public class Skill {
 		}
 		primaryKeyID = getLastID();
 	}
-	public Skill(String sN, String ra, Resume re){
-		skillName = sN;
-		rating = ra;
-		resume = re;
+	public Resume(String fN, String lN, String em){
+		firstName = fN;
+		lastName = lN;
+		email = em;
 		try{
 			Class.forName(forName);
             con = DriverManager.getConnection(driverConnection);
 			stmt = con.createStatement();
-			String sql  = "INSERT INTO SkillR (skillName,skillRating) VALUES (?,?);";
+			String sql  = "INSERT INTO ResumeR (resumeFirst,resumeLast,resumeEmail) VALUES (?,?,?);";
 			PreparedStatement p = con.prepareStatement(sql);
-			p.setString(1, sN);
-			p.setString(2, ra);
+			p.setString(1, firstName);
+			p.setString(2, lastName);
+			p.setString(3, email);
 			p.executeUpdate();
 			//con.commit();
 			}catch (SQLException e) {
@@ -71,29 +74,28 @@ public class Skill {
 	public int getID(){
 		return primaryKeyID;
 	}
-	public String getSkillName(){
-		return UtilityMySql.getStringMySql(forName, driverConnection, skillName, "skillName", table, primaryKeyName, primaryKeyID);
+	public String getfirstName(){
+		return UtilityMySql.getStringMySql(forName, driverConnection, firstName, "resumeFirst", table, primaryKeyName, primaryKeyID);
 	}
-	public String getRating(){
-		return UtilityMySql.getStringMySql(forName, driverConnection, rating, "skillRating", table, primaryKeyName, primaryKeyID);
+	public String getLastName(){
+		return UtilityMySql.getStringMySql(forName, driverConnection, lastName, "resumeLast", table, primaryKeyName, primaryKeyID);
 	}
-	public Resume getResume(){
-		return resume;
+	public String getEmail(){
+		return UtilityMySql.getStringMySql(forName, driverConnection, email, "resumeEmail", table, primaryKeyName, primaryKeyID);
 	}
-	public void setSkillName(String sN){
-		UtilityMySql.setStringMySql(forName, driverConnection, skillName, sN, "skillName", table, primaryKeyName, primaryKeyID);
+	public void setFirstName(String fN){
+		UtilityMySql.setStringMySql(forName, driverConnection, firstName, fN, "resumeFirst", table, primaryKeyName, primaryKeyID);
 	}
-	public void setRating(String ra){
-		UtilityMySql.setStringMySql(forName, driverConnection, rating, ra, "skillRating", table, primaryKeyName, primaryKeyID);
+	public void setLastName(String lN){
+		UtilityMySql.setStringMySql(forName, driverConnection, lastName, lN, "resumeLast", table, primaryKeyName, primaryKeyID);
 	}
-	public void setResume(Resume re){
-		resume = re;
+	public void setEmail(String em){
+		UtilityMySql.setStringMySql(forName, driverConnection, email, em, "resumeEmail", table, primaryKeyName, primaryKeyID);
 	}
-	
-	public String toString(){
+	/*public String toString(){
 		return String.format("%s, %s", skillName, rating);
 	}
-
+*/
 	public String consoleTextFormatter(String text, int nextLine)
 	{
 		String[] listOfStrings = text.split(" ");
