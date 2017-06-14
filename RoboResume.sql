@@ -11,8 +11,19 @@ create table EducationR
     eduID integer auto_increment,
     primary key (eduID)
 );
-
 create table WorkR
+(
+	jobTitle varchar (255),
+    employer varChar (255),
+    startMonth varChar (255),
+	startYear integer,
+    endMonth varChar (255),
+	endYear integer,
+    workResume integer,
+    workID integer auto_increment,
+    primary key (workID)
+);
+/*create table WorkR
 (
 	job integer,
     employer varChar (255),
@@ -32,11 +43,11 @@ create table JobR
     jobID integer auto_increment,
     primary key (jobID)
 );
-
+*/
 create table DutyR
 (
     dutyTitle varChar (255),
-    dutyJob integer,
+    dutyWork integer,
     dutyID integer auto_increment,
     primary key (dutyID)
 );
@@ -59,13 +70,13 @@ create table ResumeR
     primary key (resumeID)
 );
 
-SELECT WorkR.workID, JobR.jobWork
+/*SELECT WorkR.workID, JobR.jobWork
 FROM WorkR
-INNER JOIN JobR ON WorkR.workID = JobR.jobWork;
+INNER JOIN JobR ON WorkR.workID = JobR.jobWork;*/
 
-SELECT JobR.jobID = DutyR.dutyJob
-FROM JobR
-INNER JOIN DutyR ON JobR.jobID = DutyR.dutyJob;
+SELECT WorkR.workID = DutyR.dutyWork
+FROM WorkR
+INNER JOIN DutyR ON WorkR.workID = DutyR.dutyWork;
 
 SELECT ResumeR.resumeID = EducationR.eduResume
 FROM ResumeR
@@ -81,19 +92,19 @@ INNER JOIN SkillR ON ResumeR.resumeID = SkillR.skillResume;
 
 show create table EducationR;
 show create table WorkR;
-show create table JobR;
+/*show create table JobR;*/
 show create table DutyR; 
 show create table SkillR; 
 show create table ResumeR; 
 select* from EducationR;
 select* from WorkR;
-select* from JobR;
+/*select* from JobR;*/
 select* from DutyR;
 select* from SkillR;
 select* from ResumeR;
 describe EducationR;
 describe WorkR;
-describe JobR;
+/*describe JobR;*/
 describe DutyR; 
 describe SkillR;
 describe ResumeR;
