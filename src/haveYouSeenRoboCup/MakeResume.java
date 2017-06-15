@@ -2,8 +2,8 @@ package haveYouSeenRoboCup;
 
 import java.util.ArrayList;
 
-public class MakeResume {
-	public static void main (String[] args){
+public abstract class MakeResume {
+	/*public static void main (String[] args){
 		String firstName = "Andrew";
 		String lastName = "Jones";
 		String email = "sample@email.com";
@@ -96,5 +96,69 @@ public class MakeResume {
 			}
 		}
 		System.out.println(output);
+	}*/
+	public static String generateResume(Resume resume, ArrayList <Education> eduList, ArrayList <Work> workList, ArrayList <Duty> dutyList, ArrayList <Skill> skillList){
+		String output = "";
+		output += (resume.getfirstName()+" "+resume.getLastName() +"\n");
+		output += (resume.getEmail() +"\n");
+		output += "\nEducation:\n\n";
+		for(int countEdu = 0; countEdu < eduList.size(); countEdu++){
+			if(eduList.get(countEdu).getResume().getID()==resume.getID()){
+				output+=String.format("%s in %s\n%s, %s\n", eduList.get(countEdu).getDegree(), eduList.get(countEdu).getCourseOfStudy(), eduList.get(countEdu).getSchool(), eduList.get(countEdu).getGradYear());
+			}
+		}
+		output += "\nWork:\n\n";
+		int dutyNum=0;
+		for(int countWork = 0; countWork < workList.size(); countWork++){
+			if(workList.get(countWork).getResume().getID()==resume.getID()){
+				output += String.format("%s\n%s\n%s %s - %s %s\n", workList.get(countWork).getJobTitle(), workList.get(countWork).getEmployer(), workList.get(countWork).getStartMonth(),  workList.get(countWork).getStartYear(), workList.get(countWork).getEndMonth(), workList.get(countWork).getEndYear());
+				for(int countDuty = 0; countDuty < dutyList.size(); countDuty++){
+					if(dutyList.get(countDuty).getWork().getID()==workList.get(countWork).getID()){
+						output+=String.format("-Duty %s, %s\n",dutyNum+1, dutyList.get(countDuty).getdutyTitle());
+								dutyNum++;
+					}
+				}
+				dutyNum=0;
+			}
+		}
+		output += "\nSkill:\n\n";
+		for(int countSkill = 0; countSkill < skillList.size(); countSkill++){
+			if(skillList.get(countSkill).getResume().getID()==resume.getID()){
+				output+=String.format("%s, %s\n", skillList.get(countSkill).getSkillName(), skillList.get(countSkill).getRating());
+			}
+		}
+		return output;
+	}
+	public static String generateResumeHTML(Resume resume, ArrayList <Education> eduList, ArrayList <Work> workList, ArrayList <Duty> dutyList, ArrayList <Skill> skillList){
+		String output = "";
+		output += ("<div id = \"name\">"+resume.getfirstName()+" "+resume.getLastName() +"<br/></div>");
+		output += ("<div id = \"email\">"+resume.getEmail() +"<br/></div>");
+		output += "<div id = \"eduHead\"><br/>Education:<br/><br/></div>";
+		for(int countEdu = 0; countEdu < eduList.size(); countEdu++){
+			if(eduList.get(countEdu).getResume().getID()==resume.getID()){
+				output+=String.format("<div class = \"education\">%s in %s<br/>%s, %s<br/></div>", eduList.get(countEdu).getDegree(), eduList.get(countEdu).getCourseOfStudy(), eduList.get(countEdu).getSchool(), eduList.get(countEdu).getGradYear());
+			}
+		}
+		output += "<div id = \"workHead\"><br/>Work:<br/><br/></div>";
+		int dutyNum=0;
+		for(int countWork = 0; countWork < workList.size(); countWork++){
+			if(workList.get(countWork).getResume().getID()==resume.getID()){
+				output += String.format("<div class = \"work\">%s<br/>%s<br/>%s %s - %s %s<br/></div>", workList.get(countWork).getJobTitle(), workList.get(countWork).getEmployer(), workList.get(countWork).getStartMonth(),  workList.get(countWork).getStartYear(), workList.get(countWork).getEndMonth(), workList.get(countWork).getEndYear());
+				for(int countDuty = 0; countDuty < dutyList.size(); countDuty++){
+					if(dutyList.get(countDuty).getWork().getID()==workList.get(countWork).getID()){
+						output+=String.format("<div class = \"duty\">-Duty %s, %s<br/></div>",dutyNum+1, dutyList.get(countDuty).getdutyTitle());
+								dutyNum++;
+					}
+				}
+				dutyNum=0;
+			}
+		}
+		output += "<div id = \"skillHead\"><br/>Skill:<br/><br/></div>";
+		for(int countSkill = 0; countSkill < skillList.size(); countSkill++){
+			if(skillList.get(countSkill).getResume().getID()==resume.getID()){
+				output+=String.format("<div class = \"skill\">%s, %s<br/></div>", skillList.get(countSkill).getSkillName(), skillList.get(countSkill).getRating());
+			}
+		}
+		return output;
 	}
 }
