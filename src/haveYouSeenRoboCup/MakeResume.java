@@ -161,4 +161,53 @@ public abstract class MakeResume {
 		}
 		return output;
 	}
+	public static String generateResumeBootStrap(Resume resume, ArrayList <Education> eduList, ArrayList <Work> workList, ArrayList <Duty> dutyList, ArrayList <Skill> skillList){
+		String output = "";
+		output+="  <div class=\"wrapper\">"
+		       +" <div class=\"sidebar-wrapper\">"
+	           +"<div class=\"profile-container\">"
+	           +"<img class=\"profile\" src=\"assets/images/profile.png\" alt=\"\" />";
+		output += ("<h1 class=\"name\">"+resume.getfirstName()+" "+resume.getLastName() +"</h1></div>");
+	    output+="<div class=\"contact-container container-block\">"
+	               +"<ul class=\"list-unstyled contact-list\">";
+	    output+="<li class=\"email\"><i class=\"fa fa-envelope\"></i><a href=\"mailto: "+resume.getEmail() +"\">"+resume.getEmail()+"</a></li></ul></div>";
+	    
+	    output+="";
+		output += "<div class=\"education-container container-block\">"
+               +"<h2 class=\"container-block-title\">Education:</h2>";
+		for(int countEdu = 0; countEdu < eduList.size(); countEdu++){
+			if(eduList.get(countEdu).getResume().getID()==resume.getID()){
+				output+=String.format("<div class=\"item\"><h4 class=\"degree\">%s in %s</h4><h5 class=\"meta\">%s</h5><div class=\"time\">%s</div></div>", eduList.get(countEdu).getDegree(), eduList.get(countEdu).getCourseOfStudy(), eduList.get(countEdu).getSchool(), eduList.get(countEdu).getGradYear());
+			}
+		}
+		output+="</div></div>";
+		output+="<div class=\"main-wrapper\">"
+	           +"<section class=\"section experiences-section\">"
+	           +"<h2 class=\"section-title\"><i class=\"fa fa-briefcase\"></i>Experiences</h2>";
+		int dutyNum=0;
+		for(int countWork = 0; countWork < workList.size(); countWork++){
+			if(workList.get(countWork).getResume().getID()==resume.getID()){
+				output += String.format("<div class=\"item\"><div class=\"meta\"><div class=\"upper-row\"><h3 class=\"job-title\">%s</h3><div class=\"time\">%s %s - %s %s</div></div><div class=\"company\">%s</div></div>", workList.get(countWork).getJobTitle(), workList.get(countWork).getStartMonth(),  workList.get(countWork).getStartYear(), workList.get(countWork).getEndMonth(), workList.get(countWork).getEndYear(), workList.get(countWork).getEmployer());
+				output+="<div class=\"details\">";
+				for(int countDuty = 0; countDuty < dutyList.size(); countDuty++){
+					if(dutyList.get(countDuty).getWork().getID()==workList.get(countWork).getID()){
+						output+=String.format("<p>-Duty %s, %s</p>",dutyNum+1, dutyList.get(countDuty).getdutyTitle());
+								dutyNum++;
+					}
+				}
+				output+="</div></div></section>";
+				dutyNum=0;
+			}
+		}
+		output+= "<section class=\"skills-section section\">"
+               +"<h2 class=\"section-title\"><i class=\"fa fa-rocket\"></i>Skills &amp; Proficiency</h2>";
+		for(int countSkill = 0; countSkill < skillList.size(); countSkill++){
+			if(skillList.get(countSkill).getResume().getID()==resume.getID()){
+				output+=String.format("<div class=\"skillset\">                            <div class=\"item\">                        <h3 class=\"level-title\">     %s    </h3> <div class=\"details\"> <p>  %s   </p> </div>    </div>   ", skillList.get(countSkill).getSkillName(), skillList.get(countSkill).getRating());
+				//output+=String.format("<div class=\"item\"><h3 class=\"level-title\">%s</h3><div class=\"level-bar\"><div class=\"level-bar-inner\" data-level=\"98%\"></div></div><div class=\"details\"><p>%s</p></div></div>", skillList.get(countSkill).getSkillName(), skillList.get(countSkill).getRating());
+			}
+		}
+		output+="</div></section></div></div>";
+		return output;
+	}
 }
